@@ -1,6 +1,12 @@
 describe MyCrawler do
+
+    before :all do
+        @crawler = MyCrawler.new
+    end
+
     describe '#new' do
         it "starts the Twitter client" do
+            @crawler.client.should be_an_instance_of Twitter::Streaming::Client
         end
     end
 
