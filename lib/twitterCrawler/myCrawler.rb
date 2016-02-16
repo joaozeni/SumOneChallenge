@@ -17,7 +17,7 @@ class MyCrawler
         @client.filter(track: keyWords.join(",")) do |obj|
             if obj.is_a?(Twitter::Tweet) then
                 response = Unirest.post "http://localhost:3000/", 
-                    parameters:{ :user => "#{obj.user.screen_name}", text: => "#{obj.text}" }
+                    parameters:{ :user => "#{obj.user.screen_name}", :text => "#{obj.text}" }
                 puts "usr: #{obj.user.screen_name}"
                 puts "text: #{obj.text}"
             end
@@ -25,3 +25,6 @@ class MyCrawler
     end
 
 end
+
+mc = MyCrawler.new
+mc.craw ["superbowl", "beyonce"]

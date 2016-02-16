@@ -21,12 +21,16 @@ default: &default
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
   host: localhost
-  username: sumOneUsr
-  password: 10202966so
+  username: jgzeni
+  password: 10202969ji
 
 development:
   <<: *default
   database: sumOneChallenge_development
+  pool: 5
+  host: localhost
+  username: jgzeni
+  password: 10202969ji
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
