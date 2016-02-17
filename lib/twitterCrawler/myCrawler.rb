@@ -15,7 +15,7 @@ class MyCrawler
     end
 
     def craw keyWords
-        @client.filter(track: keyWords.join(",")) do |obj|
+        @filterThread = Thread.new { @client.filter(track: keyWords.join(",")) do |obj|
             if obj.is_a?(Twitter::Tweet) then
                 #response = RestClient.post 'http://localhost:3000/tweets/create', :user => "#{obj.user.screen_name}"
                 response = RestClient.post 'http://localhost:3000/tweets/create', :user => {:user => "#{obj.user.screen_name}"},:text => {:text => "#{obj.text}"}
@@ -24,12 +24,27 @@ class MyCrawler
                 #    parameters:{ :user => "#{obj.user.screen_name}"}
                 #puts "usr: #{obj.user.screen_name}"
                 #puts "text: #{obj.text}"
-                puts response.code
+                #puts response.code
             end
-        end
+        end }
+        @filterThread.run
+    end
+
+    def end_craw
+        @filterThread.exit
     end
 
 end
 
 mc = MyCrawler.new
 mc.craw ["superbowl", "beyonce"]
+
+@userInput = ""
+while @userInput != 'q'
+    puts "type q to end: "
+    @userInput = gets.chomp
+    puts "inputed #{@userInput}"
+    if @userInput == 'q'
+        mc.end_craw
+    end
+end

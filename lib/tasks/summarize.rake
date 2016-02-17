@@ -1,10 +1,9 @@
 task summarize: :environment do
-    @tweet = Tweet.all
-    puts "#{@tweet.size}"
     @userWithMostTweets = ""
     @numberOfTweetsFromUser = 0
     @tweetsPerHour = Array.new(24) { |e| e = 0 }
     Tweet.find_each do |tweet|
+        texts = Text.where("tweet_id = ?", tweet.id)
         if texts.size > @numberOfTweetsFromUser
             @numberOfTweetsFromUser = texts.size
             @userWithMostTweets = tweet.user
