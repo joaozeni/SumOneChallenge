@@ -1,5 +1,6 @@
 require 'twitter'
 require 'unirest'
+require 'rest-client'
 
 class MyCrawler
 
@@ -16,10 +17,14 @@ class MyCrawler
     def craw keyWords
         @client.filter(track: keyWords.join(",")) do |obj|
             if obj.is_a?(Twitter::Tweet) then
-                response = Unirest.post "http://localhost:3000/", 
-                    parameters:{ :user => "#{obj.user.screen_name}", :text => "#{obj.text}" }
-                puts "usr: #{obj.user.screen_name}"
-                puts "text: #{obj.text}"
+                #response = RestClient.post 'http://localhost:3000/tweets/create', :user => "#{obj.user.screen_name}"
+                response = RestClient.post 'http://localhost:3000/tweets/create', :user => {:user => "#{obj.user.screen_name}"},:text => {:text => "#{obj.text}"}
+                #response = Unirest.post "http://localhost:3000/tweets/create.json",
+                #    headers:{ "Accept" => "application/json" },
+                #    parameters:{ :user => "#{obj.user.screen_name}"}
+                #puts "usr: #{obj.user.screen_name}"
+                #puts "text: #{obj.text}"
+                puts response.code
             end
         end
     end

@@ -1,5 +1,10 @@
 <% if @tweets.blank? %>
     <p>There are not any tweets currently in the system.</p>
 <% else %>
-    <p>These are the current books in our system</p>
+    <p>These are the current tweets in our system</p>
+    <ul id = "tweets">
+    <% @tweets.each do |c| %>
+        <p> <%= "User: #{c.user}"-%>
+    <% end %>
+    </ul>
 <%end%>
