@@ -16,11 +16,23 @@ ActiveRecord::Schema.define(version: 20160215232847) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "texts", force: :cascade do |t|
+  create_table "text", force: :cascade do |t|
+    t.integer  "tweet_id"
     t.text     "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_index "text", ["tweet_id"], name: "index_text_on_tweet_id", using: :btree
+
+  create_table "texts", force: :cascade do |t|
+    t.integer  "tweet_id"
+    t.text     "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "texts", ["tweet_id"], name: "index_texts_on_tweet_id", using: :btree
 
   create_table "tweets", force: :cascade do |t|
     t.string   "user"

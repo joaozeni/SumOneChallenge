@@ -1,12 +1,15 @@
 class TweetsController < ApplicationController
     skip_before_filter :verify_authenticity_token, :only => [:create]
     def create
-        #puts params[:user]
-        @tweet = Tweet.new(user_param)
-        #@tweet = Tweet.where(params[:user]).first_or_create
-        #@tweet.save
-        #@tweet.texts.create(text_param)
+        @tweet = Tweet.find_or_initialize_by(user_param)
         @tweet.save
+        puts "ID: #{@tweet.inspect}"
+        
+        @text = Text.create(text_param)
+        @text.tweet_id = @tweet.id
+        @text.save
+        puts "ID2: #{@text.inspect}"
+        
         render json: { message: "OK"}
     end
 
@@ -19,6 +22,6 @@ class TweetsController < ApplicationController
     end
 
     def text_param
-        params.require(:text).permit(:tweet_id,:text)
+        params.require(:text).permit(:tweet_id, :text)
     end
 end
