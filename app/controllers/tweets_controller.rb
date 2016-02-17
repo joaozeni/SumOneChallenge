@@ -6,7 +6,7 @@ class TweetsController < ApplicationController
         puts "ID: #{@tweet.inspect}"
         
         @text = Text.create(text_param)
-        @text.tweet_id = @tweet.id
+        @text.tweet = @tweet
         @text.save
         puts "ID2: #{@text.inspect}"
         
