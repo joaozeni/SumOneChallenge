@@ -28,6 +28,7 @@ gem 'rspec'
 gem 'twitter'
 gem 'unirest'
 gem 'rest-client'
+gem 'dotenv'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

@@ -1,3 +1,5 @@
+require_relative '../myCrawler'
+
 describe MyCrawler do
 
     before :all do
@@ -11,16 +13,18 @@ describe MyCrawler do
     end
 
     describe '#craw' do
-        it "takes an array for argument" do
-        end
-
         it "connects to the Twitter stream" do
+            @crawler.craw
+            @crawler.filterThread.alive?.should be true
         end
 
         it "posts the received tweets" do
+            @crawler.status.should eql 500
         end
 
         it "ends when receive a command" do
+            @crawler.end_craw
+            @crawler.filterThread.alive?.should_not be true
         end
     end
 end

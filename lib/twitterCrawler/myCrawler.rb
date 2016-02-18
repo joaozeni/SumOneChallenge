@@ -5,7 +5,7 @@ Dotenv.load
 
 class MyCrawler
 
-    attr_reader :client, :status
+    attr_reader :client, :status, :filterThread
     def initialize
         @client = Twitter::Streaming::Client.new do |config|
             config.consumer_key = ENV['CONSUMER_KEY']
@@ -20,7 +20,7 @@ class MyCrawler
         @filterThread = Thread.new { @client.filter(track: ENV['KEYWORDS']) do |obj|
             if obj.is_a?(Twitter::Tweet) then
                 response = RestClient.post 'http://localhost:3000/tweets/create', :user => {:user => "#{obj.user.screen_name}"},:text => {:text => "#{obj.text}"}
-                @status = response.code
+                #@status = response.code
             end
         end }
         @filterThread.run
