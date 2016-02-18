@@ -1,30 +1,26 @@
 require 'twitter'
-require 'unirest'
 require 'rest-client'
+require 'dotenv'
+Dotenv.load 
 
 class MyCrawler
 
-    attr_reader :client
-    def initialize 
+    attr_reader :client, :status
+    def initialize
         @client = Twitter::Streaming::Client.new do |config|
-            config.consumer_key = "dc6rGUkC5VCha0wyPrxEShn9H"
-            config.consumer_secret = "crDx7kNDZBjOLUiV3TH953FzWhQXix11VECK2yyYj3qhqUE3zy"
-            config.access_token = "14244472-fjH9hDSKih0XUuY4pzT0BdSTXWzYj5x6cDcKQZfgH"
-            config.access_token_secret = "EdDJ1DUo4170HL71TuLJswHqkJFopRSxRIREj3XJYZCcz"
+            config.consumer_key = ENV['CONSUMER_KEY']
+            config.consumer_secret = ENV['CONSUMER_SECRET']
+            config.access_token = ENV['ACCESS_TOKEN']
+            config.access_token_secret = ENV['ACCESS_TOKEN_SECRET']
         end
     end
 
-    def craw keyWords
-        @filterThread = Thread.new { @client.filter(track: keyWords.join(",")) do |obj|
+    def craw 
+        puts "ENV #{ENV['KEYWORDS']}"
+        @filterThread = Thread.new { @client.filter(track: ENV['KEYWORDS']) do |obj|
             if obj.is_a?(Twitter::Tweet) then
-                #response = RestClient.post 'http://localhost:3000/tweets/create', :user => "#{obj.user.screen_name}"
                 response = RestClient.post 'http://localhost:3000/tweets/create', :user => {:user => "#{obj.user.screen_name}"},:text => {:text => "#{obj.text}"}
-                #response = Unirest.post "http://localhost:3000/tweets/create.json",
-                #    headers:{ "Accept" => "application/json" },
-                #    parameters:{ :user => "#{obj.user.screen_name}"}
-                #puts "usr: #{obj.user.screen_name}"
-                #puts "text: #{obj.text}"
-                #puts response.code
+                @status = response.code
             end
         end }
         @filterThread.run
@@ -37,7 +33,7 @@ class MyCrawler
 end
 
 mc = MyCrawler.new
-mc.craw ["superbowl", "beyonce"]
+mc.craw
 
 @userInput = ""
 while @userInput != 'q'
